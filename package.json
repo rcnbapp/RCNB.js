@@ -1,6 +1,6 @@
 {
   "name": "rcnb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "The world is based on RC. Thus, RCNB.",
   "main": "rcnb.js",
   "scripts": {
