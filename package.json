@@ -1,0 +1,23 @@
+{
+  "name": "rcnb",
+  "version": "1.0.0",
+  "description": "The world is based on RC. Thus, RCNB.",
+  "main": "rcnb.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Coxxs/RCNB.js.git"
+  },
+  "keywords": [
+    "rcnb",
+    "encoding"
+  ],
+  "author": "Coxxs",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Coxxs/RCNB.js/issues"
+  },
+  "homepage": "https://github.com/Coxxs/RCNB.js#readme"
+}
