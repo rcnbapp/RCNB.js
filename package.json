@@ -1,7 +1,7 @@
 {
   "name": "rcnb",
   "version": "1.0.2",
-  "description": "The world is based on RC. Thus, RCNB.",
+  "description": "The world is based on RC. Thus, everything can be encoded into RCNB.",
   "main": "rcnb.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
