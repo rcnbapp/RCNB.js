@@ -4,7 +4,7 @@
   "description": "The world is based on RC. Thus, everything can be encoded into RCNB.",
   "main": "rcnb.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "repository": {
     "type": "git",
@@ -19,5 +19,8 @@
   "bugs": {
     "url": "https://github.com/Coxxs/RCNB.js/issues"
   },
-  "homepage": "https://github.com/Coxxs/RCNB.js#readme"
+  "homepage": "https://github.com/Coxxs/RCNB.js#readme",
+  "devDependencies": {
+    "mocha": "^5.2.0"
+  }
 }
