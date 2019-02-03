@@ -1,3 +1,9 @@
+/*
+  RCNB.js 
+  Copyright (c) 2019 Coxxs
+  License: https://github.com/Coxxs/RCNB.js/blob/master/LICENSE
+*/
+
 var rcnb = (function() {
   // char
   var cr = 'rRŔŕŖŗŘřƦȐȑȒȓɌɍ'
