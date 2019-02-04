@@ -19,13 +19,15 @@ var rcnb = (function() {
   var src = sr * sc
   var snb = sn * sb
   var scnb = sc * snb
+  
+  var RCNBDecodeError
 
   function _div(a, b) {
     return Math.floor(a / b)
   }
 
   function _encodeByte(i) {
-    if (i > 0xFF) throw 'rc/nb overflow'
+    if (i > 0xFF) throw new RangeError('rc/nb overflow')
     if (i > 0x7F) {
       i = i & 0x7F
       return cn.charAt(_div(i, sb)) + cb.charAt(i % sb)
@@ -34,7 +36,7 @@ var rcnb = (function() {
   }
 
   function _encodeShort(i) {
-    if (i > 0xFFFF) throw 'rcnb overflow'
+    if (i > 0xFFFF) throw new RangeError('rcnb overflow')
     var reverse = false
     if (i > 0x7FFF) {
       reverse = true
@@ -60,7 +62,7 @@ var rcnb = (function() {
       idx = [cn.indexOf(c.charAt(0)), cb.indexOf(c.charAt(1))]
       nb = true
     }
-    if (idx[0] < 0 || idx[1] < 0) throw 'not rc/nb'
+    if (idx[0] < 0 || idx[1] < 0) throw new RangeError('not rc/nb')
     return nb ? (idx[0] * sb + idx[1]) | 0x80 : idx[0] * sc + idx[1]
   }
 
@@ -72,7 +74,7 @@ var rcnb = (function() {
     } else {
       idx = [cr.indexOf(c.charAt(2)), cc.indexOf(c.charAt(3)), cn.indexOf(c.charAt(0)), cb.indexOf(c.charAt(1))]
     }
-    if (idx[0] < 0 || idx[1] < 0 || idx[2] < 0 || idx[3] < 0) throw 'not rcnb'
+    if (idx[0] < 0 || idx[1] < 0 || idx[2] < 0 || idx[3] < 0) throw new RangeError('not rcnb')
     return (idx[0] * scnb + idx[1] * snb + idx[2] * sb + idx[3]) | (reverse ? 0x8000 : 0)
   }
 
@@ -88,7 +90,7 @@ var rcnb = (function() {
       return str
     },
     decode: function(str) {
-      if (str.length & 1) throw 'invalid length'
+      if (str.length & 1) throw new TypeError('invalid length')
       var arr = []
       // decode every 2 bytes (1 rcnb = 2 bytes)
       for (var i = 0; i < (str.length >> 2); i++) {
@@ -99,7 +101,7 @@ var rcnb = (function() {
       // decode tailing byte (1 rc / 1 nb = 1 byte)
       if (str.length & 2) arr.push(_decodeByte(str.substr(-2, 2)))
       return Uint8Array.from(arr)
-    }
+    },
   }
 
   return rcnb
