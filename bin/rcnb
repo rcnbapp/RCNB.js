@@ -1,0 +1,37 @@
+#! /usr/bin/env node
+(function () {
+  var rcnb = require('..')
+  var util = require('util')
+  
+  function runWith(transform) {
+    // input from: argv or stdin
+    if (process.argv[3] === '--') {
+      var readline = require('readline')
+      var cli = readline.createInterface({
+        input: process.stdin,
+        crlfDelay: Infinity
+      })
+      var input = ''
+      cli.on('line', function(line) { input = input + line + '\n' })
+      cli.on('close', function() { console.log(transform(input)) })
+    } else if (process.argv[3]) {
+      console.log(transform(process.argv[3]))
+    } else {
+      console.error('No input detected. Please give a string for ' + transform.name + ' or input through stdin with the `--` option.')
+    }
+  }
+  // encode or decode
+  switch (process.argv[2]) {
+    case 'e':
+    case 'encode':
+      runWith(function encoding(str) { return rcnb.encode(new util.TextEncoder().encode(str)) })
+      break
+    case 'd':
+    case 'decode':
+      runWith(function decoding(str) { return new util.TextDecoder().decode(rcnb.decode(str)) })
+      break
+    default:
+      console.error('Expected one of ["encode", "decode"], received "' + process.argv[2] + '"')
+      break
+  }
+})()

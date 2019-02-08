@@ -3,6 +3,9 @@
   "version": "1.0.9",
   "description": "The world is based on RC. Thus, everything can be encoded into RCNB.",
   "main": "rcnb.js",
+  "bin": {
+    "rcnb": "./bin/rcnb"
+  },
   "scripts": {
     "test": "mocha"
   },
