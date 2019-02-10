@@ -3,6 +3,7 @@
   "version": "1.0.9",
   "description": "The world is based on RC. Thus, everything can be encoded into RCNB.",
   "main": "rcnb.js",
+  "types": "index.d.ts",
   "bin": {
     "rcnb": "./bin/rcnb"
   },
