@@ -2,6 +2,8 @@
 
 The world is based on RC. Thus, *everything* can be encoded into RCNB.
 
+See also: [RCNB.php](https://github.com/Coxxs/RCNB.php)
+
 ## Why RCNB?
 
 ### RCNB vs Base64
