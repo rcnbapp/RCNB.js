@@ -1,7 +1,7 @@
 /*
   RCNB.js 
   Copyright (c) 2019 Coxxs
-  License: https://github.com/Coxxs/RCNB.js/blob/master/LICENSE
+  License: https://github.com/rcnbapp/RCNB.js/blob/master/LICENSE
 */
 
 var rcnb = (function() {
