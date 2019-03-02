@@ -11,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Coxxs/RCNB.js.git"
+    "url": "git+https://github.com/rcnbapp/RCNB.js.git"
   },
   "keywords": [
     "rcnb",
@@ -20,9 +20,9 @@
   "author": "Coxxs",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/Coxxs/RCNB.js/issues"
+    "url": "https://github.com/rcnbapp/RCNB.js/issues"
   },
-  "homepage": "https://github.com/Coxxs/RCNB.js#readme",
+  "homepage": "https://github.com/rcnbapp/RCNB.js#readme",
   "devDependencies": {
     "mocha": "^5.2.0"
   }
