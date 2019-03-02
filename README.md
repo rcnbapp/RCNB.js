@@ -1,8 +1,8 @@
-# RCNB.js [![Build Status](https://travis-ci.com/Coxxs/RCNB.js.svg?branch=master)](https://travis-ci.com/Coxxs/RCNB.js)
+# RCNB.js [![Build Status](https://travis-ci.com/rcnbapp/RCNB.js.svg?branch=master)](https://travis-ci.com/rcnbapp/RCNB.js)
 
 The world is based on RC. Thus, *everything* can be encoded into RCNB.
 
-See also: [RCNB.php](https://github.com/Coxxs/RCNB.php)
+See also: [RCNB.php](https://github.com/rcnbapp/RCNB.php)
 
 ## Why RCNB?
 
