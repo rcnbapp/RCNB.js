@@ -2,7 +2,7 @@
 
 The world is based on RC. Thus, *everything* can be encoded into RCNB.
 
-See also: [RCNB.php](https://github.com/rcnbapp/RCNB.php)
+See also: [librcnb](https://github.com/rcnbapp/librcnb) [RCNB.php](https://github.com/rcnbapp/RCNB.php)
 
 ## Why RCNB?
 
