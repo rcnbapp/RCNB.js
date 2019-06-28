@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/rcnbapp/RCNB.js#readme",
   "devDependencies": {
-    "mocha": "^5.2.0"
+    "mocha": "^5.2.0",
+    "stream-equal": "^1.1.1",
+    "streamifier": "^0.1.1"
   }
 }
