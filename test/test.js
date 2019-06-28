@@ -19,6 +19,20 @@ describe('RCNB', function() {
     assert.deepStrictEqual(rcnb.decode('ȵßȑƈȓƇńÞƞƃ'), new Uint8Array([222, 233, 111, 122, 222]))
     assert.strictEqual(new TextDecoder("utf-8").decode(rcnb.decode('ȐĉņþƦȻƝƃŔć')), 'RCNB!')
   })
+
+  it('should error', async function() {
+    // length & 1 == true
+    assert.throws(() => rcnb.decode('ɌcńƁȓČņ'))
+
+    // not RCNB
+    assert.throws(() => rcnb.decode('cɌńƁ'))
+    assert.throws(() => rcnb.decode('BcńƁ'))
+
+    // overflow
+    assert.throws(() => rcnb.decode('ɍȼȵþ'))
+    assert.throws(() => rcnb.decode('ɍȼ'))
+    assert.throws(() => rcnb.decode('ȵþ'))
+  });
 })
 
 describe('RCNB stream', function() {
@@ -158,4 +172,17 @@ describe('RCNB stream', function() {
 
     assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
+
+  it('should error', async function() {
+    // non Buffer or string stream
+    var promises = []
+    promises.push(new Promise(function(resolve) {
+      createReadStream({}).pipe(rcnb.encodeStream()).on('error', resolve)
+    }))
+    promises.push(new Promise(function(resolve) {
+      createReadStream({}).pipe(rcnb.decodeStream()).on('error', resolve)
+    }))
+    var results = await Promise.all(promises)
+    assert.strict(results.every(err => err instanceof Error))
+  });
 })
