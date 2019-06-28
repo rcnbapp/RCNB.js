@@ -122,7 +122,7 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     result += output.read()
 
-    assert.strictEqual(result, 'ȵßȑƈȓƇńÞƞƃ')
+    assert.strictEqual(result, 'ȐȼŃƅȓčƞÞƦȻƝƃŖć')
   })
   
   it('should decode from stream (2+3)', async function() {
