@@ -64,7 +64,7 @@ describe('RCNB', function() {
     var timer
     var timerPromise = new Promise(function(_, reject) {
       timer = setImmediate(function() {
-        reject(new Error('encoding timeout'))
+        reject(new Error('decoding timeout'))
       })
     })
     try {
