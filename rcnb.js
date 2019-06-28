@@ -80,6 +80,58 @@ var rcnb = (function() {
     return reverse ? result | 0x8000 : result
   }
 
+  function streamFactory(_rcnb) {
+    if (!streamFactory._ret) {
+      var Transform = require('stream').Transform
+
+      function EncodeStream(options) {
+        if (!(this instanceof EncodeStream)) return new EncodeStream(options);
+        // the function is supported only if `require('stream')` is supported
+        Transform.call(this, options);
+      }
+
+      EncodeStream.prototype = Object.create(Transform.prototype)
+      EncodeStream.prototype._transform = function(chunk, encoding, callback) {
+        var buf
+        if (typeof chunk === 'string') {
+          buf = Buffer.from(chunk, encoding)
+        } else if (Buffer.isBuffer(chunk)) {
+          buf = chunk
+        } else {
+          callback(new Error('unsupported stream'))
+          return
+        }
+        callback(null, _rcnb.encode(buf))
+      }
+
+      function DecodeStream(options) {
+        if (!(this instanceof DecodeStream)) return new DecodeStream(options);
+        // the function is supported only if `require('stream')` is supported
+        Transform.call(this, options);
+      }
+
+      DecodeStream.prototype = Object.create(Transform.prototype)
+      DecodeStream.prototype._transform = function(chunk, _, callback) {
+        var str
+        if (typeof chunk === 'string') {
+          str = chunk
+        } else if (Buffer.isBuffer(chunk)) {
+          str = chunk.toString()
+        } else {
+          callback(new Error('unsupported stream'))
+          return
+        }
+        callback(null, _rcnb.decode(str))
+      }
+
+      streamFactory._ret = {
+        EncodeStream: EncodeStream,
+        DecodeStream: DecodeStream
+      }
+    }
+    return streamFactory._ret
+  }
+
   var rcnb = {
     encode: function(arr) {
       var str = ''
@@ -103,6 +155,14 @@ var rcnb = (function() {
       // decode tailing byte (1 rc / 1 nb = 1 byte)
       if (str.length & 2) arr.push(_decodeByte(str.substr(-2, 2)))
       return Uint8Array.from(arr)
+    },
+    encodeStream: function(options) {
+      var EncodeStream = streamFactory(rcnb).EncodeStream
+      return new EncodeStream(options)
+    },
+    decodeStream: function(options) {
+      var DecodeStream = streamFactory(rcnb).DecodeStream
+      return new DecodeStream(options)
     }
   }
 
