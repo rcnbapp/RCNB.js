@@ -32,7 +32,7 @@ describe('RCNB', function() {
     assert.throws(() => rcnb.decode('ɍȼȵþ'))
     assert.throws(() => rcnb.decode('ɍȼ'))
     assert.throws(() => rcnb.decode('ȵþ'))
-  });
+  })
 })
 
 describe('RCNB stream', function() {
@@ -138,6 +138,7 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     results.push(output.read())
 
+    results = results.filter(n => n) // remove null results
     assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
 
@@ -154,6 +155,7 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     results.push(output.read())
 
+    results = results.filter(n => n) // remove null results
     assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
 
@@ -170,6 +172,7 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     results.push(output.read())
 
+    results = results.filter(n => n) // remove null results
     assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
 
@@ -184,5 +187,5 @@ describe('RCNB stream', function() {
     }))
     var results = await Promise.all(promises)
     assert.strict(results.every(err => err instanceof Error))
-  });
+  })
 })
