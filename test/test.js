@@ -37,7 +37,7 @@ describe('RCNB stream', function() {
     assert.strictEqual(result, 'ȵßȑƈ')
   })
 
-  it('should encode from stream (3+2)', async function() {
+  it('should encode from stream (2+3)', async function() {
     let input = new stream.Readable
     input._read = () => {}
 
@@ -54,7 +54,7 @@ describe('RCNB stream', function() {
     assert.strictEqual(result, 'ȵßȑƈȓƇńÞƞƃ')
   })
 
-  it('should encode from stream (2+3)', async function() {
+  it('should encode from stream (3+2)', async function() {
     let input = new stream.Readable
     input._read = () => {}
 
