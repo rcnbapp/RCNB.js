@@ -48,6 +48,25 @@ rcnb.encode(new TextEncoder('utf-8').encode('Who NB?')) // 'ȐȼŃƅȓčƞÞƦȻ
 new TextDecoder('utf-8').decode(rcnb.decode('ȐĉņþƦȻƝƃŔć')) // 'RCNB!'
 ```
 
+### With NodeJS Stream API
+```js
+const rcnb = require('rcnb')
+const fs = require('fs')
+
+fs.createReadStream('your.txt')
+  .pipe(rcnb.encodeStream())
+  .pipe(fs.createWriteStream('your.rcnb'))
+
+fs.createReadStream('your.rcnb')
+  .pipe(rcnb.decodeStream())
+  .pipe(fs.createWriteStream('your.txt'))
+```
+
+#### `encodeStream([options])` / `decodeStream([options])`
+Support all available options of [stream.Transform](https://nodejs.org/api/stream.html#stream_class_stream_transform)
+
+> Note that only streams of **Buffer** or **string** are supported.
+
 ### CLI
 
 ```bash

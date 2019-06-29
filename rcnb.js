@@ -80,6 +80,100 @@ var rcnb = (function() {
     return reverse ? result | 0x8000 : result
   }
 
+  function streamFactory(_rcnb) {
+    if (!streamFactory._ret) {
+      var Transform = require('stream').Transform
+
+      function EncodeStream(options) {
+        if (!(this instanceof EncodeStream)) return new EncodeStream(options);
+        // the function is supported only if `require('stream')` is supported
+        Transform.call(this, options);
+      }
+
+      EncodeStream.prototype = Object.create(Transform.prototype)
+      EncodeStream.prototype._transform = function(chunk, encoding, callback) {
+        var buf
+        if (typeof chunk === 'string') {
+          buf = Buffer.from(chunk, encoding)
+        } else if (Buffer.isBuffer(chunk)) {
+          buf = chunk
+        } else {
+          callback(new Error('unsupported stream'))
+          return
+        }
+        if (this._remain) {
+          buf = Buffer.concat([this._remain, buf])
+          this._remain = null
+        }
+        // put trailing byte into _remain
+        if (buf.length & 1) {
+          this._remain = buf.slice(buf.length - 1)
+          buf = buf.slice(0, buf.length - 1)
+        }
+        if (buf) {
+          this.push(_rcnb.encode(buf))
+        }
+        callback()
+      }
+      EncodeStream.prototype._flush = function(callback) {
+        if (this._remain) {
+          this.push(_rcnb.encode(this._remain))
+          this._remain = null
+        }
+        callback()
+      }
+
+      function DecodeStream(options) {
+        if (!(this instanceof DecodeStream)) return new DecodeStream(options);
+        // the function is supported only if `require('stream')` is supported
+        Transform.call(this, options);
+      }
+
+      DecodeStream.prototype = Object.create(Transform.prototype)
+      DecodeStream.prototype._transform = function(chunk, _, callback) {
+        var str
+        if (typeof chunk === 'string') {
+          str = chunk
+        } else if (Buffer.isBuffer(chunk)) {
+          str = chunk.toString()
+        } else {
+          callback(new Error('unsupported stream'))
+          return
+        }
+        if (this._remain) {
+          str = this._remain + str
+          this._remain = null
+        }
+        // put remaining chars into _remain
+        if (str.length & 3) { // <=> if (length % 4)
+          this._remain = str.slice(-(str.length & 3))
+          str = str.slice(0, -(str.length & 3))
+        }
+        if (str) {
+          this.push(_rcnb.decode(str))
+        }
+        callback()
+      }
+      DecodeStream.prototype._flush = function(callback) {
+        if (this._remain) {
+          if (this._remain.length & 1) { // <==> length === 1 || length === 3
+            callback(new Error('invalid length'))
+            return
+          }
+          this.push(_rcnb.decode(this._remain))
+          this._remain = null
+        }
+        callback()
+      }
+
+      streamFactory._ret = {
+        EncodeStream: EncodeStream,
+        DecodeStream: DecodeStream
+      }
+    }
+    return streamFactory._ret
+  }
+
   var rcnb = {
     encode: function(arr) {
       var str = ''
@@ -103,6 +197,14 @@ var rcnb = (function() {
       // decode tailing byte (1 rc / 1 nb = 1 byte)
       if (str.length & 2) arr.push(_decodeByte(str.substr(-2, 2)))
       return Uint8Array.from(arr)
+    },
+    encodeStream: function(options) {
+      var EncodeStream = streamFactory(rcnb).EncodeStream
+      return new EncodeStream(options)
+    },
+    decodeStream: function(options) {
+      var DecodeStream = streamFactory(rcnb).DecodeStream
+      return new DecodeStream(options)
     }
   }
 
