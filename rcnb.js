@@ -140,7 +140,30 @@ var rcnb = (function() {
           callback(new Error('unsupported stream'))
           return
         }
-        callback(null, _rcnb.decode(str))
+        if (this._remain) {
+          str = this._remain + str
+          this._remain = null
+        }
+        // put remaining chars into _remain
+        if (str.length & 3) { // <=> if (length % 4)
+          this._remain = str.slice(-(str.length & 3))
+          str = str.slice(0, -(str.length & 3))
+        }
+        if (str) {
+          this.push(_rcnb.decode(str))
+        }
+        callback()
+      }
+      DecodeStream.prototype._flush = function(callback) {
+        if (this._remain) {
+          if (this._remain.length & 1) { // <==> length === 1 || length === 3
+            callback(new Error('invalid length'))
+            return
+          }
+          this.push(_rcnb.decode(this._remain))
+          this._remain = null
+        }
+        callback()
       }
 
       streamFactory._ret = {
