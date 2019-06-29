@@ -101,7 +101,26 @@ var rcnb = (function() {
           callback(new Error('unsupported stream'))
           return
         }
-        callback(null, _rcnb.encode(buf))
+        if (this._remain) {
+          buf = Buffer.concat([this._remain, buf])
+          this._remain = null
+        }
+        // put trailing byte into _remain
+        if (buf.length & 1) {
+          this._remain = buf.slice(buf.length - 1)
+          buf = buf.slice(0, buf.length - 1)
+        }
+        if (buf) {
+          this.push(_rcnb.encode(buf))
+        }
+        callback()
+      }
+      EncodeStream.prototype._flush = function(callback) {
+        if (this._remain) {
+          this.push(_rcnb.encode(this._remain))
+          this._remain = null
+        }
+        callback()
       }
 
       function DecodeStream(options) {
