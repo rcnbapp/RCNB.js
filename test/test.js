@@ -3,8 +3,6 @@ const stream = require('stream')
 const util = require('util')
 
 const nextTick = util.promisify(process.nextTick)
-const {createReadStream} = require('streamifier')
-const streamEqual = require('stream-equal')
 const rcnb = require('../rcnb')
 
 describe('RCNB', function() {
@@ -178,18 +176,5 @@ describe('RCNB stream', function() {
 
     results = results.filter(n => n) // remove null results
     assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
-  })
-
-  it('should error', async function() {
-    // non Buffer or string stream
-    var promises = []
-    promises.push(new Promise(function(resolve) {
-      createReadStream({}).pipe(rcnb.encodeStream()).on('error', resolve)
-    }))
-    promises.push(new Promise(function(resolve) {
-      createReadStream({}).pipe(rcnb.decodeStream()).on('error', resolve)
-    }))
-    var results = await Promise.all(promises)
-    assert.strict(results.every(err => err instanceof Error))
   })
 })
