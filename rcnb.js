@@ -156,7 +156,7 @@ var rcnb = (function() {
       }
       DecodeStream.prototype._flush = function(callback) {
         if (this._remain) {
-          if (this._remain.length & 1) { // <==> length === 1 || length === 3
+          if (this._remain.length & 1) { // <=> length === 1 || length === 3
             callback(new Error('invalid length'))
             return
           }

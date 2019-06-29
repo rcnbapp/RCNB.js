@@ -53,13 +53,13 @@ new TextDecoder('utf-8').decode(rcnb.decode('ȐĉņþƦȻƝƃŔć')) // 'RCNB!'
 const rcnb = require('rcnb')
 const fs = require('fs')
 
-fs.createReadStream('your.txt')
+fs.createReadStream('input.txt')
   .pipe(rcnb.encodeStream())
-  .pipe(fs.createWriteStream('your.rcnb'))
+  .pipe(fs.createWriteStream('rcnb.txt'))
 
-fs.createReadStream('your.rcnb')
+fs.createReadStream('rcnb.txt')
   .pipe(rcnb.decodeStream())
-  .pipe(fs.createWriteStream('your.txt'))
+  .pipe(fs.createWriteStream('output.txt'))
 ```
 
 #### `encodeStream([options])` / `decodeStream([options])`
