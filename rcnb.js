@@ -139,7 +139,6 @@ var rcnb = (function() {
   return rcnb
 })()
 
-console.log('---Test---')
 var s = [104, 101, 108, 108, 111]
 var es = rcnb.encode(s)
 console.log(es)
