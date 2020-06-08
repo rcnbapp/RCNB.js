@@ -1,4 +1,4 @@
-# RCNB.js [![Build Status](https://travis-ci.com/rcnbapp/RCNB.js.svg?branch=master)](https://travis-ci.com/rcnbapp/RCNB.js)
+# RCNB.js ![Node.js CI](https://github.com/rcnbapp/RCNB.js/workflows/build/badge.svg)
 
 The world is based on RC. Thus, *everything* can be encoded into RCNB.
 
