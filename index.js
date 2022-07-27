@@ -10,3 +10,5 @@ export function encodeStream(options) {
 export function decodeStream(options) {
   return new DecodeStream(options)
 }
+
+export default { encode, decode, EncodeStream, DecodeStream, encodeStream, decodeStream }

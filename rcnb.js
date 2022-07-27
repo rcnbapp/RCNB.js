@@ -1,4 +1,4 @@
-/*
+/*!
   RCNB.js 
   Copyright (c) 2019-2022 Coxxs
   License: https://github.com/rcnbapp/RCNB.js/blob/master/LICENSE
@@ -80,6 +80,9 @@ function _decodeShort(c) {
 }
 
 export function encode(arr) {
+  if (!(arr instanceof Uint8Array)) {
+    throw new TypeError('argument is not an instance of Uint8Array')
+  }
   let str = ''
   // encode every 2 bytes
   for (let i = 0; i < (arr.length >> 1); i++) {
@@ -103,3 +106,5 @@ export function decode(str) {
   if (str.length & 2) arr.push(_decodeByte(str.substr(-2, 2)))
   return Uint8Array.from(arr)
 }
+
+export default { encode, decode }
