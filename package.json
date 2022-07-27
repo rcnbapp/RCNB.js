@@ -1,6 +1,6 @@
 {
   "name": "rcnb",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "The world is based on RC. Thus, everything can be encoded into RCNB.",
   "main": "index.js",
   "type": "module",
