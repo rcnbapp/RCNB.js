@@ -27,13 +27,15 @@ $ npm install -g rcnb # Install RCNB.js as a global CLI
 ### In Browser
 
 ```html
-<script src="rcnb.js"></script>
+<script type="module">
+  import rcnb from 'https://cdn.jsdelivr.net/npm/rcnb@2/rcnb.min.js'
+</script>
 ```
 
 ### Node.js
 
 ```javascript
-const rcnb = require('rcnb')
+import rcnb from 'rcnb'
 ```
 
 ## Usage
@@ -50,19 +52,19 @@ new TextDecoder('utf-8').decode(rcnb.decode('ȐĉņþƦȻƝƃŔć')) // 'RCNB!'
 
 ### With NodeJS Stream API
 ```js
-const rcnb = require('rcnb')
-const fs = require('fs')
+import fs from 'fs'
+import { EncodeStream, DecodeStream } from 'rcnb'
 
 fs.createReadStream('input.txt')
-  .pipe(rcnb.encodeStream())
+  .pipe(new EncodeStream())
   .pipe(fs.createWriteStream('rcnb.txt'))
 
 fs.createReadStream('rcnb.txt')
-  .pipe(rcnb.decodeStream())
+  .pipe(new DecodeStream())
   .pipe(fs.createWriteStream('output.txt'))
 ```
 
-#### `encodeStream([options])` / `decodeStream([options])`
+#### `EncodeStream([options])` / `DecodeStream([options])`
 Support all available options of [stream.Transform](https://nodejs.org/api/stream.html#stream_class_stream_transform)
 
 > Note that only streams of **Buffer** or **string** are supported.
