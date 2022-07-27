@@ -1,35 +1,35 @@
-const assert = require('assert')
-const stream = require('stream')
-const util = require('util')
+import { strictEqual, deepStrictEqual, throws } from 'assert'
+import { Readable } from 'stream'
+import { promisify } from 'util'
 
-const nextTick = util.promisify(process.nextTick)
-const rcnb = require('../rcnb')
+const nextTick = promisify(process.nextTick)
+import { encode, decode, EncodeStream, DecodeStream } from '../index.js'
 
 describe('RCNB', function() {
   it('should encode', function() {
-    assert.strictEqual(rcnb.encode(new Uint8Array([114, 99, 110, 98])), 'ɌcńƁȓČņÞ')
-    assert.strictEqual(rcnb.encode(new Uint8Array([222, 233, 111, 122, 222])), 'ȵßȑƈȓƇńÞƞƃ')
-    assert.strictEqual(rcnb.encode(new TextEncoder('utf-8').encode('Who NB?')), 'ȐȼŃƅȓčƞÞƦȻƝƃŖć')
+    strictEqual(encode(new Uint8Array([114, 99, 110, 98])), 'ɌcńƁȓČņÞ')
+    strictEqual(encode(new Uint8Array([222, 233, 111, 122, 222])), 'ȵßȑƈȓƇńÞƞƃ')
+    strictEqual(encode(new TextEncoder('utf-8').encode('Who NB?')), 'ȐȼŃƅȓčƞÞƦȻƝƃŖć')
   })
   
   it('should decode', function() {
-    assert.deepStrictEqual(rcnb.decode('ɌcńƁȓČņÞ'), new Uint8Array([114, 99, 110, 98]))
-    assert.deepStrictEqual(rcnb.decode('ȵßȑƈȓƇńÞƞƃ'), new Uint8Array([222, 233, 111, 122, 222]))
-    assert.strictEqual(new TextDecoder("utf-8").decode(rcnb.decode('ȐĉņþƦȻƝƃŔć')), 'RCNB!')
+    deepStrictEqual(decode('ɌcńƁȓČņÞ'), new Uint8Array([114, 99, 110, 98]))
+    deepStrictEqual(decode('ȵßȑƈȓƇńÞƞƃ'), new Uint8Array([222, 233, 111, 122, 222]))
+    strictEqual(new TextDecoder("utf-8").decode(decode('ȐĉņþƦȻƝƃŔć')), 'RCNB!')
   })
 
   it('should error', async function() {
     // length & 1 == true
-    assert.throws(() => rcnb.decode('ɌcńƁȓČņ'))
+    throws(() => decode('ɌcńƁȓČņ'))
 
     // not RCNB
-    assert.throws(() => rcnb.decode('cɌńƁ'))
-    assert.throws(() => rcnb.decode('BcńƁ'))
+    throws(() => decode('cɌńƁ'))
+    throws(() => decode('BcńƁ'))
 
     // overflow
-    assert.throws(() => rcnb.decode('ɍȼȵþ'))
-    assert.throws(() => rcnb.decode('ɍȼ'))
-    assert.throws(() => rcnb.decode('ȵþ'))
+    throws(() => decode('ɍȼȵþ'))
+    throws(() => decode('ɍȼ'))
+    throws(() => decode('ȵþ'))
   })
 })
 
@@ -40,24 +40,24 @@ describe('RCNB stream', function() {
   }
 
   it('should encode from stream (partial)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.encodeStream())
+    let output = input.pipe(new EncodeStream())
     output.setEncoding('utf-8')
 
     let results = []
     input.push(Buffer.of(222, 233))
     await waitAndRead(output, results)
 
-    assert.strictEqual(results.join(''), 'ȵßȑƈ')
+    strictEqual(results.join(''), 'ȵßȑƈ')
   })
 
   it('should encode from stream (2+3)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.encodeStream())
+    let output = input.pipe(new EncodeStream())
     output.setEncoding('utf-8')
 
     let results = []
@@ -67,14 +67,14 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     await waitAndRead(output, results)
 
-    assert.strictEqual(results.join(''), 'ȵßȑƈȓƇńÞƞƃ')
+    strictEqual(results.join(''), 'ȵßȑƈȓƇńÞƞƃ')
   })
 
   it('should encode from stream (3+2)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.encodeStream())
+    let output = input.pipe(new EncodeStream())
     output.setEncoding('utf-8')
 
     let results = []
@@ -84,14 +84,14 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     await waitAndRead(output, results)
 
-    assert.strictEqual(results.join(''), 'ȵßȑƈȓƇńÞƞƃ')
+    strictEqual(results.join(''), 'ȵßȑƈȓƇńÞƞƃ')
   })
 
   it('should encode from stream (1+1+1+1+1)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.encodeStream())
+    let output = input.pipe(new EncodeStream())
     output.setEncoding('utf-8')
 
     let results = []
@@ -107,14 +107,14 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     await waitAndRead(output, results)
 
-    assert.strictEqual(results.join(''), 'ȵßȑƈȓƇńÞƞƃ')
+    strictEqual(results.join(''), 'ȵßȑƈȓƇńÞƞƃ')
   })
 
   it('should encode from stream 2', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.encodeStream())
+    let output = input.pipe(new EncodeStream())
     output.setEncoding('utf-8')
 
     let results = []
@@ -124,14 +124,14 @@ describe('RCNB stream', function() {
     input.push(null) // indicates EOF
     await waitAndRead(output, results)
 
-    assert.strictEqual(results.join(''), 'ȐȼŃƅȓčƞÞƦȻƝƃŖć')
+    strictEqual(results.join(''), 'ȐȼŃƅȓčƞÞƦȻƝƃŖć')
   })
   
   it('should decode from stream (2+3)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.decodeStream())
+    let output = input.pipe(new DecodeStream())
 
     let results = []
     input.push(Buffer.from('ȵßȑƈ', 'utf-8'))
@@ -141,14 +141,14 @@ describe('RCNB stream', function() {
     await waitAndRead(output, results)
 
     results = results.filter(n => n) // remove null results
-    assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
+    deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
 
   it('should decode from stream (2.5+2.5)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.decodeStream())
+    let output = input.pipe(new DecodeStream())
 
     let results = []
     input.push(Buffer.from('ȵßȑƈȓ', 'utf-8'))
@@ -158,14 +158,14 @@ describe('RCNB stream', function() {
     await waitAndRead(output, results)
 
     results = results.filter(n => n) // remove null results
-    assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
+    deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
 
   it('should decode from stream (3+2)', async function() {
-    let input = new stream.Readable
+    let input = new Readable
     input._read = () => {}
 
-    let output = input.pipe(rcnb.decodeStream())
+    let output = input.pipe(new DecodeStream())
 
     let results = []
     input.push('ȵßȑƈȓƇ')
@@ -175,6 +175,6 @@ describe('RCNB stream', function() {
     await waitAndRead(output, results)
 
     results = results.filter(n => n) // remove null results
-    assert.deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
+    deepStrictEqual(Buffer.concat(results), Buffer.of(222, 233, 111, 122, 222))
   })
 })
