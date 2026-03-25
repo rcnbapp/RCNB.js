@@ -9,7 +9,7 @@
     "rcnb": "./bin/rcnb.js"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "node --test"
   },
   "repository": {
     "type": "git",
@@ -24,8 +24,5 @@
   "bugs": {
     "url": "https://github.com/rcnbapp/RCNB.js/issues"
   },
-  "homepage": "https://github.com/rcnbapp/RCNB.js#readme",
-  "devDependencies": {
-    "mocha": "^10.0.0"
-  }
+  "homepage": "https://github.com/rcnbapp/RCNB.js#readme"
 }

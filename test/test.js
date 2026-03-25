@@ -1,4 +1,5 @@
-import { strictEqual, deepStrictEqual, throws } from 'assert'
+import { describe, it } from 'node:test'
+import { strictEqual, deepStrictEqual, throws } from 'node:assert'
 import { Readable } from 'stream'
 import { promisify } from 'util'
 
